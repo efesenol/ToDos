@@ -7,8 +7,8 @@ namespace ToDos.Entity
         public string? surname { get; set; }
         public string? email { get; set; }
         public string? password { get; set; }
-        public DateTime createTime { get; set; }
-        public bool active { get; set; }
+        public DateTime? createTime { get; set; }
+        public bool? active { get; set; }
 
         
     }

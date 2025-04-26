@@ -25,7 +25,7 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Index(string email, string password)
     {
-        var user = _db.Users.FirstOrDefault(x => x.email == email && x.password == password);
+        var user = _db.User.FirstOrDefault(x => x.email == email && x.password == password);
         if( user != null)
         {
             return RedirectToAction("Privacy","Home");

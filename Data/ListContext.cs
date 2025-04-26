@@ -6,6 +6,6 @@ namespace ToDos.Data
     public class ListContext : DbContext
     {
         public ListContext(DbContextOptions<ListContext> options) : base(options){}
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
     }    
 }
