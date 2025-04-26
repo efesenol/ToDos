@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Globalization
+@{
     ViewData["Title"] = "Görevlerim";
 }
 
@@ -43,12 +44,11 @@
         margin-bottom: 30px;
     }
 </style>
-<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-
+@model ViewModel
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 sidebar">
-            <h4>To Do</h4>
+            <h4>Yapılacak Görevler Seni Bekleniyor! @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.isuser.name.ToLower())</h4>
             <nav class="nav flex-column mt-4">
                 <a class="nav-link" href="#">Günüm</a>
                 <a class="nav-link" href="#">Önemli</a>
@@ -84,28 +84,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if (Model != null && Model.Count > 0)
+                    @if (Model.Jobs != null && Model.Jobs.Count > 0)
                     {
-                        foreach (var job in Model)
+                        foreach (var item in Model.Jobs)
                         {
                             var rowClass = "";
-                            if (job.active == false)
+                            if (item.active == false)
                             {
                                 rowClass = "table-danger"; 
                             }
-                            else if (job.active)
+                            else if (item.active == true)
                             {
                                 rowClass = "table-success"; 
                             }
 
                             <tr class="@rowClass">
-                                <td>@job.jobName</td>
-                                <td>@job.jobTitle</td>
-                                <td>@job.jobDescription</td>
+                                <td>@item.jobName</td>
+                                <td>@item.jobTitle</td>
+                                <td>@item.jobDescription</td>
                                 <td>
-                                    @if (job.createTime != null)
+                                    @if (item.createTime != null)
                                     {
-                                        @job.createTime?.ToString("dd/MM/yyyy")
+                                        @item.createTime?.ToString("dd/MM/yyyy")
                                     }
                                     else
                                     {
@@ -113,9 +113,9 @@
                                     }
                                 </td>
                                 <td>
-                                    @if (job.finishTime > job.createTime)
+                                    @if (item.finishTime > item.createTime)
                                     {
-                                        @job.finishTime?.ToString("dd/MM/yyyy")
+                                        @item.finishTime?.ToString("dd/MM/yyyy")
                                     }
                                     else
                                     {
@@ -123,25 +123,25 @@
                                     }
                                 </td>
                                 <td>
-                                    @if (job.finishTime == null && job.active)
+                                    @if (item.finishTime == null && item.active == true)
                                     {
                                         <span class="badge bg-success">Aktif</span>
                                     }
-                                    @if (job.finishTime > job.createTime && job.active == false )
+                                    @if (item.finishTime > item.createTime && item.active == false )
                                     {
                                         <span class="badge bg-secondary">Tamamlandı</span>
                                     }
                                 </td>
                                 <td>
-                                    @if (job.priorityId == 1)
+                                    @if (item.priorityId == 1)
                                     {
                                         <span class="badge bg-danger">Yüksek Öncelikli</span>
                                     }
-                                    @if(job.priorityId == 2)
+                                    @if(item.priorityId == 2)
                                     {
                                         <span class="badge bg-warning">Orta Öncelikli</span>
                                     }
-                                    @if(job.priorityId == 3)
+                                    @if(item.priorityId == 3)
                                     {
                                         <span class="badge bg-success">Biraz Bekleyebilir</span>
                                     }
@@ -149,27 +149,27 @@
                                 <td>
     <div class="d-flex gap-2">
         <form asp-action="DeactivateJob" method="post">
-            <input type="hidden" name="id" value="@job.id" />
+            <input type="hidden" name="id" value="@item.id" />
             <button type="submit" class="btn btn-success" title="Pasifleştir">
                 <i class="fa-solid fa-check"></i>
             </button>
         </form>
 
         <form asp-action="UpdateJob" method="get">
-            <input type="hidden" name="id" value="@job.id" />
+            <input type="hidden" name="id" value="@item.id" />
             <button type="submit" class="btn btn-primary" title="Güncelle">
                 <i class="fa-solid fa-sliders"></i>
             </button>
         </form>
 
         <form asp-action="DeleteJob" method="post">
-            <input type="hidden" name="id" value="@job.id" />
+            <input type="hidden" name="id" value="@item.id" />
             <button type="submit" class="btn btn-danger" title="Sil">
                 <i class="fa-solid fa-trash"></i>
             </button>
         </form>
         <form asp-action="RestartJob" method="post">
-            <input type="hidden" name="id" value="@job.id" />
+            <input type="hidden" name="id" value="@item.id" />
             <button type="submit" class="btn btn-danger" title="Aktif Et">
                 <i class="fa-solid fa-rotate-left"></i>
             </button>

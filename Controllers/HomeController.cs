@@ -76,8 +76,10 @@ public IActionResult RestartJob(int id)
 }
     public IActionResult Privacy()
     {
-        var jobs = _db.Jobs.Where(x => x.deleted != true ).ToList();
-        return View(jobs);
+        var viewModel = new ViewModel();  
+        viewModel.Jobs = _db.Jobs.Where(x => x.deleted != true ).ToList();
+        viewModel.isuser = _db.User.FirstOrDefault();
+        return View(viewModel);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
