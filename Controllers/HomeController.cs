@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using ToDos.Data;
 using ToDos.Models;
 
 namespace ToDos.Controllers;
@@ -7,15 +8,34 @@ namespace ToDos.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly ListContext _db;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, ListContext db)
     {
         _logger = logger;
+        _db = db;
     }
+    
 
+      
     public IActionResult Index()
     {
         return View();
+    }
+    [HttpPost]
+    public IActionResult Index(string email, string password)
+    {
+        var user = _db.Users.FirstOrDefault(x => x.email == email && x.password == password);
+        if( user != null)
+        {
+            return RedirectToAction("Privacy","Home");
+
+        }
+        else
+        {
+            ViewBag.Error = "Email veya şifre hatalı!";
+            return View();
+        }
     }
 
     public IActionResult Privacy()
