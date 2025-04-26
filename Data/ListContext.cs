@@ -7,5 +7,6 @@ namespace ToDos.Data
     {
         public ListContext(DbContextOptions<ListContext> options) : base(options){}
         public DbSet<User> User { get; set; }
+        public DbSet<Jobs> Jobs { get; set; }
     }    
 }

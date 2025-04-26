@@ -40,7 +40,8 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        return View();
+        var jobs = _db.Jobs.Where(x => !x.deleted).ToList();
+        return View(jobs);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

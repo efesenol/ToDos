@@ -1,4 +1,66 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "İş Listesi";
 }
-Giriş Yapıldı
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">İşlerim</h2>
+
+    <div class="row">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var job in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@job.jobName</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@job.jobTitle</h6>
+                            <p class="card-text flex-grow-1">@job.jobDescription</p>
+
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    Oluşturulma: @job.createTime.ToString("dd/MM/yyyy")
+                                </small><br />
+                                @if (job.finishTime > job.createTime)
+                                {
+                                    <small class="text-success">
+                                        Bitiş: @job.finishTime.ToString("dd/MM/yyyy")
+                                    </small>
+                                }
+                                else
+                                {
+                                    <small class="text-warning">
+                                        Henüz tamamlanmadı
+                                    </small>
+                                }
+                            </div>
+
+                            <div class="mt-3">
+                                @if (job.active)
+                                {
+                                    <span class="badge bg-success">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Pasif</span>
+                                }
+                                @if (job.deleted)
+                                {
+                                    <span class="badge bg-danger">Silinmiş</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    Henüz bir iş eklenmemiş.
+                </div>
+            </div>
+        }
+    </div>
+</div>
