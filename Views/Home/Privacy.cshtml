@@ -1,66 +1,199 @@
 ﻿@{
-    ViewData["Title"] = "İş Listesi";
+    ViewData["Title"] = "Görevlerim";
 }
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">İşlerim</h2>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 
+<!-- jQuery + DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .sidebar {
+        background-color: #fff;
+        padding: 20px;
+        height: 100vh;
+        border-right: 1px solid #ddd;
+    }
+
+    .sidebar .nav-link {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .sidebar .nav-link:hover {
+        background-color: #f0f0f0;
+        border-radius: 8px;
+    }
+
+    .content {
+        padding: 30px;
+    }
+
+    .top-header {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+</style>
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+<div class="container-fluid">
     <div class="row">
-        @if (Model != null && Model.Count > 0)
-        {
-            foreach (var job in Model)
-            {
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@job.jobName</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">@job.jobTitle</h6>
-                            <p class="card-text flex-grow-1">@job.jobDescription</p>
+        <div class="col-md-2 sidebar">
+            <h4>To Do</h4>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="#">Günüm</a>
+                <a class="nav-link" href="#">Önemli</a>
+                <a class="nav-link" href="#">Planlanan</a>
+                <a class="nav-link" href="#">Bana Atanmış</a>
+                <a class="nav-link" href="#">Görevler</a>
+                <hr />
+                <a class="nav-link text-primary" href="#">+ Yeni Liste</a>
+            </nav>
+        </div>
 
-                            <div class="mt-3">
-                                <small class="text-muted">
-                                    Oluşturulma: @job.createTime.ToString("dd/MM/yyyy")
-                                </small><br />
-                                @if (job.finishTime > job.createTime)
-                                {
-                                    <small class="text-success">
-                                        Bitiş: @job.finishTime.ToString("dd/MM/yyyy")
-                                    </small>
-                                }
-                                else
-                                {
-                                    <small class="text-warning">
-                                        Henüz tamamlanmadı
-                                    </small>
-                                }
-                            </div>
-
-                            <div class="mt-3">
-                                @if (job.active)
-                                {
-                                    <span class="badge bg-success">Aktif</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-secondary">Pasif</span>
-                                }
-                                @if (job.deleted)
-                                {
-                                    <span class="badge bg-danger">Silinmiş</span>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    Henüz bir iş eklenmemiş.
+        <!-- Main Content -->
+        <div class="col-md-10 content">
+            <div class="top-header d-flex align-items-center justify-content-between">
+                <div>Görevler</div>
+                <div>
+                    <button class="btn btn-primary">+ Görev Ekle</button>
                 </div>
             </div>
-        }
+
+            <div class="table-responsive">
+                <table id="jobsTable" class="display nowrap table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>İş Adı</th>
+                            <th>Başlık</th>
+                            <th>Açıklama</th>
+                            <th>Oluşturulma</th>
+                            <th>Bitiş</th>
+                            <th>Durum</th>
+                            <th>Önceliği</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var job in Model)
+                        {
+                            var rowClass = "";
+                            if (job.active == false)
+                            {
+                                rowClass = "table-danger"; 
+                            }
+                            else if (job.active)
+                            {
+                                rowClass = "table-success"; 
+                            }
+
+                            <tr class="@rowClass">
+                                <td>@job.jobName</td>
+                                <td>@job.jobTitle</td>
+                                <td>@job.jobDescription</td>
+                                <td>
+                                    @if (job.createTime != null)
+                                    {
+                                        @job.createTime?.ToString("dd/MM/yyyy")
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (job.finishTime > job.createTime)
+                                    {
+                                        @job.finishTime?.ToString("dd/MM/yyyy")
+                                    }
+                                    else
+                                    {
+                                        <span>Bekleniyor</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (job.finishTime == null && job.active)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    @if (job.finishTime > job.createTime && job.active == false )
+                                    {
+                                        <span class="badge bg-secondary">Tamamlandı</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (job.priorityId == 1)
+                                    {
+                                        <span class="badge bg-danger">Yüksek Öncelikli</span>
+                                    }
+                                    @if(job.priorityId == 2)
+                                    {
+                                        <span class="badge bg-warning">Orta Öncelikli</span>
+                                    }
+                                    @if(job.priorityId == 3)
+                                    {
+                                        <span class="badge bg-success">Biraz Bekleyebilir</span>
+                                    }
+                                </td>
+                                <td>
+    <div class="d-flex gap-2">
+        <form asp-action="DeactivateJob" method="post">
+            <input type="hidden" name="id" value="@job.id" />
+            <button type="submit" class="btn btn-success" title="Pasifleştir">
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </form>
+
+        <form asp-action="UpdateJob" method="get">
+            <input type="hidden" name="id" value="@job.id" />
+            <button type="submit" class="btn btn-primary" title="Güncelle">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
+        </form>
+
+        <form asp-action="DeleteJob" method="post">
+            <input type="hidden" name="id" value="@job.id" />
+            <button type="submit" class="btn btn-danger" title="Sil">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </form>
+        <form asp-action="RestartJob" method="post">
+            <input type="hidden" name="id" value="@job.id" />
+            <button type="submit" class="btn btn-danger" title="Aktif Et">
+                <i class="fa-solid fa-rotate-left"></i>
+            </button>
+        </form>
+        
+    </div>
+</td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#jobsTable').DataTable({
+            responsive: true,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json"
+            }
+        });
+    });
+</script>

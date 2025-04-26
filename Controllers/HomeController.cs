@@ -37,10 +37,46 @@ public class HomeController : Controller
             return View();
         }
     }
+[HttpPost]
+public IActionResult DeactivateJob(int id)
+{
+    var job = _db.Jobs.FirstOrDefault(x => x.id == id);
+    if (job != null)
+    {
+        job.finishTime = DateTime.Now;
+        job.active = false;
+        _db.SaveChanges();
+    }
+    return RedirectToAction("Privacy"); 
+}
 
+[HttpPost]
+public IActionResult DeleteJob(int id)
+{
+    var job = _db.Jobs.FirstOrDefault(x => x.id == id);
+    if (job != null)
+    {
+        job.deleted = true;
+        _db.SaveChanges();
+    }
+    return RedirectToAction("Privacy"); 
+}
+
+[HttpPost]
+public IActionResult RestartJob(int id)
+{
+    var job = _db.Jobs.FirstOrDefault(x => x.id == id);
+    if (job != null)
+    {
+        job.active = true;
+        job.finishTime = null;
+        _db.SaveChanges();
+    }
+    return RedirectToAction("Privacy"); 
+}
     public IActionResult Privacy()
     {
-        var jobs = _db.Jobs.Where(x => !x.deleted).ToList();
+        var jobs = _db.Jobs.Where(x => x.deleted != true ).ToList();
         return View(jobs);
     }
 
