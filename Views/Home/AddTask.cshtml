@@ -1,0 +1,55 @@
+
+@model ViewModel
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center rounded-top">
+                    <h3 class="mb-0">+ Yeni Görev Ekle</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="AddTask" method="post">
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="jobName" name="jobName" placeholder="İş Adı" required>
+                            <label for="jobName">İş Adı</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="jobTitle" name="jobTitle" placeholder="Başlık" required>
+                            <label for="jobTitle">Başlık</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="jobDescription" name="jobDescription" placeholder="Açıklama" style="height: 150px;" required></textarea>
+                            <label for="jobDescription">Açıklama</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="createTime" class="form-label">Bitiş Tarihi</label>
+                            <input type="date" class="form-control" id="createTime" name="createTime">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="priorityId" class="form-label">Öncelik</label>
+                            <select class="form-select" id="priorityId" name="priorityId" required>
+                                <option selected disabled>Öncelik Seçin</option>
+                                <option value="1">Yüksek Öncelikli</option>
+                                <option value="2">Orta Öncelikli</option>
+                                <option value="3">Düşük Öncelikli</option>
+                            </select>
+                        </div>
+
+                       <div class="d-flex justify-content-between">
+    <a href="/home/gorevlerim" class="btn btn-outline-secondary">İptal</a>
+    <button type="submit" class="btn btn-primary">Görev Ekle</button>
+</div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

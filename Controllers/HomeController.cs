@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ToDos.Data;
+using ToDos.Entity;
 using ToDos.Models;
 
 namespace ToDos.Controllers;
@@ -17,7 +18,7 @@ public class HomeController : Controller
     }
     
 
-      
+    
     public IActionResult Index()
     {
         return View();
@@ -28,7 +29,7 @@ public class HomeController : Controller
         var user = _db.User.FirstOrDefault(x => x.email == email && x.password == password);
         if( user != null)
         {
-            return RedirectToAction("Privacy","Home");
+            return RedirectToAction("gorevlerim");
 
         }
         else
@@ -37,43 +38,44 @@ public class HomeController : Controller
             return View();
         }
     }
-[HttpPost]
-public IActionResult DeactivateJob(int id)
-{
-    var job = _db.Jobs.FirstOrDefault(x => x.id == id);
-    if (job != null)
+    [HttpPost]
+    public IActionResult DeactivateJob(int id)
     {
-        job.finishTime = DateTime.Now;
-        job.active = false;
-        _db.SaveChanges();
+        var job = _db.Jobs.FirstOrDefault(x => x.id == id);
+        if (job != null)
+        {
+            job.finishTime = DateTime.Now;
+            job.active = false;
+            _db.SaveChanges();
+        }
+        return RedirectToAction("gorevlerim"); 
     }
-    return RedirectToAction("Privacy"); 
-}
 
-[HttpPost]
-public IActionResult DeleteJob(int id)
-{
-    var job = _db.Jobs.FirstOrDefault(x => x.id == id);
-    if (job != null)
+    [HttpPost]
+    public IActionResult DeleteJob(int id)
     {
-        job.deleted = true;
-        _db.SaveChanges();
+        var job = _db.Jobs.FirstOrDefault(x => x.id == id);
+        if (job != null)
+        {
+            job.deleted = true;
+            _db.SaveChanges();
+        }
+        return RedirectToAction("gorevlerim"); 
     }
-    return RedirectToAction("Privacy"); 
-}
 
-[HttpPost]
-public IActionResult RestartJob(int id)
-{
-    var job = _db.Jobs.FirstOrDefault(x => x.id == id);
-    if (job != null)
+    [HttpPost]
+    public IActionResult RestartJob(int id)
     {
-        job.active = true;
-        job.finishTime = null;
-        _db.SaveChanges();
+        var job = _db.Jobs.FirstOrDefault(x => x.id == id);
+        if (job != null)
+        {
+            job.active = true;
+            job.finishTime = null;
+            _db.SaveChanges();
+        }
+        return RedirectToAction("gorevlerim"); 
     }
-    return RedirectToAction("Privacy"); 
-}
+    [Route("home/gorevlerim")]
     public IActionResult Privacy()
     {
         var viewModel = new ViewModel();  
@@ -81,10 +83,32 @@ public IActionResult RestartJob(int id)
         viewModel.isuser = _db.User.FirstOrDefault();
         return View(viewModel);
     }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    [Route("gorevekle")]
+    public IActionResult AddTask()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var model = new ViewModel();
+        model.isuser = _db.User.FirstOrDefault();
+        return View(model);
     }
+
+    [HttpPost]
+public IActionResult AddTask(string jobName, string jobTitle, string jobDescription, DateTime createTime, int priorityId)
+{
+    var newTask = new Jobs
+    {
+        jobName = jobName,
+        jobTitle = jobTitle,
+        jobDescription = jobDescription,
+        createTime = createTime,
+        priorityId = priorityId
+    };
+
+    _db.Jobs.Add(newTask);
+    _db.SaveChanges();
+
+    return RedirectToAction("Gorevlerim", "Home");
+}
+
+
+    
 }

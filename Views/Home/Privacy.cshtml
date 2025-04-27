@@ -12,60 +12,16 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
-<style>
-    body {
-        background-color: #f5f5f5;
-    }
 
-    .sidebar {
-        background-color: #fff;
-        padding: 20px;
-        height: 100vh;
-        border-right: 1px solid #ddd;
-    }
-
-    .sidebar .nav-link {
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .sidebar .nav-link:hover {
-        background-color: #f0f0f0;
-        border-radius: 8px;
-    }
-
-    .content {
-        padding: 30px;
-    }
-
-    .top-header {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 30px;
-    }
-</style>
 @model ViewModel
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2 sidebar">
-            <h4>Yapılacak Görevler Seni Bekleniyor! @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.isuser.name.ToLower())</h4>
-            <nav class="nav flex-column mt-4">
-                <a class="nav-link" href="#">Günüm</a>
-                <a class="nav-link" href="#">Önemli</a>
-                <a class="nav-link" href="#">Planlanan</a>
-                <a class="nav-link" href="#">Bana Atanmış</a>
-                <a class="nav-link" href="#">Görevler</a>
-                <hr />
-                <a class="nav-link text-primary" href="#">+ Yeni Liste</a>
-            </nav>
-        </div>
+
 
         <!-- Main Content -->
         <div class="col-md-10 content">
             <div class="top-header d-flex align-items-center justify-content-between">
                 <div>Görevler</div>
                 <div>
-                    <button class="btn btn-primary">+ Görev Ekle</button>
+                    <a href="/gorevekle" class="btn btn-primary">+ Görev Ekle</a>
                 </div>
             </div>
 
@@ -147,36 +103,36 @@
                                     }
                                 </td>
                                 <td>
-    <div class="d-flex gap-2">
-        <form asp-action="DeactivateJob" method="post">
-            <input type="hidden" name="id" value="@item.id" />
-            <button type="submit" class="btn btn-success" title="Pasifleştir">
-                <i class="fa-solid fa-check"></i>
-            </button>
-        </form>
+                                    <div class="d-flex gap-2">
+                                        <form asp-action="DeactivateJob" method="post">
+                                            <input type="hidden" name="id" value="@item.id" />
+                                            <button type="submit" class="btn btn-success" title="Pasifleştir">
+                                                <i class="fa-solid fa-check"></i>
+                                            </button>
+                                        </form>
 
-        <form asp-action="UpdateJob" method="get">
-            <input type="hidden" name="id" value="@item.id" />
-            <button type="submit" class="btn btn-primary" title="Güncelle">
-                <i class="fa-solid fa-sliders"></i>
-            </button>
-        </form>
+                                        <form asp-action="UpdateJob" method="get">
+                                            <input type="hidden" name="id" value="@item.id" />
+                                            <button type="submit" class="btn btn-primary" title="Güncelle">
+                                                <i class="fa-solid fa-sliders"></i>
+                                            </button>
+                                        </form>
 
-        <form asp-action="DeleteJob" method="post">
-            <input type="hidden" name="id" value="@item.id" />
-            <button type="submit" class="btn btn-danger" title="Sil">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        </form>
-        <form asp-action="RestartJob" method="post">
-            <input type="hidden" name="id" value="@item.id" />
-            <button type="submit" class="btn btn-danger" title="Aktif Et">
-                <i class="fa-solid fa-rotate-left"></i>
-            </button>
-        </form>
-        
-    </div>
-</td>
+                                        <form asp-action="DeleteJob" method="post">
+                                            <input type="hidden" name="id" value="@item.id" />
+                                            <button type="submit" class="btn btn-danger" title="Sil">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                        <form asp-action="RestartJob" method="post">
+                                            <input type="hidden" name="id" value="@item.id" />
+                                            <button type="submit" class="btn btn-danger" title="Aktif Et">
+                                                <i class="fa-solid fa-rotate-left"></i>
+                                            </button>
+                                        </form>
+                                        
+                                    </div>
+                                </td>
                             </tr>
                         }
                     }

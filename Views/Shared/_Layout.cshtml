@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,20 +9,66 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ToDos.styles.css" asp-append-version="true" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
 
+    .sidebar {
+        background-color: #fff;
+        padding: 20px;
+        height: 100vh;
+        border-right: 1px solid #ddd;
+    }
+
+    .sidebar .nav-link {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .sidebar .nav-link:hover {
+        background-color: #f0f0f0;
+        border-radius: 8px;
+    }
+
+    .content {
+        padding: 30px;
+    }
+
+    .top-header {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+</style>
 </head>
+
 <body>
- 
-   
-        <main role="main" class="pb-3">
+    
+    <div class="row">
+        <div class="col-md-2 sidebar">
+            <h4>Yapılacak Görevler Seni Bekleniyor! @CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.isuser.name.ToLower())</h4>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="home/gorevlerim">Günüm</a>
+                <a class="nav-link" href="#">Önemli</a>
+                <a class="nav-link" href="#">Planlanan</a>
+                <a class="nav-link" href="#">Bana Atanmış</a>
+                <a class="nav-link" href="#">Görevler</a>
+                <hr />
+                <a class="nav-link text-primary" href="#">+ Yeni Liste</a>
+            </nav>
+        </div>
+    
+
+        <main role="main" class="pb-3 col-md-10">
             @RenderBody()
         </main>
-   
+   </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - ToDos - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+        <center><div class="container" style="color:  grey;">
+            &copy; @DateTime.Now.Year - ToDo - Designed By <a href="https://efesenol.com/" style="text-decoration: none;">Efe Şenol</a> 
+        </div></center>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
