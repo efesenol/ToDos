@@ -83,15 +83,16 @@ public class HomeController : Controller
         viewModel.isuser = _db.User.FirstOrDefault();
         return View(viewModel);
     }
-    [Route("gorevekle")]
-    public IActionResult AddTask()
-    {
-        var model = new ViewModel();
-        model.isuser = _db.User.FirstOrDefault();
-        return View(model);
-    }
-
+    [HttpGet]
+[Route("gorevekle")]
+public IActionResult AddTask()
+{
+    var model = new ViewModel();
+    model.isuser = _db.User.FirstOrDefault();
+    return View(model);
+}
     [HttpPost]
+[Route("gorevekle")]
 public IActionResult AddTask(string jobName, string jobTitle, string jobDescription, DateTime createTime, int priorityId)
 {
     var newTask = new Jobs
@@ -99,8 +100,9 @@ public IActionResult AddTask(string jobName, string jobTitle, string jobDescript
         jobName = jobName,
         jobTitle = jobTitle,
         jobDescription = jobDescription,
-        createTime = createTime,
-        priorityId = priorityId
+        createTime = DateTime.Now,
+        priorityId = priorityId,
+        active = true
     };
 
     _db.Jobs.Add(newTask);
@@ -108,7 +110,6 @@ public IActionResult AddTask(string jobName, string jobTitle, string jobDescript
 
     return RedirectToAction("Gorevlerim", "Home");
 }
-
 
     
 }
